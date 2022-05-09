@@ -39,6 +39,12 @@ for branch_name in LIBRARY_BRANCHES:
                     repo["rev"] = "v4.2.0"
                     break
 
+            # Next, update pre-commit-hooks version
+            for repo in yaml_repos:
+                if repo["repo"] == "https://github.com/python/black":
+                    repo["rev"] = "22.3.0"
+                    break
+
             # Finally, some things get converted to YAML-style lists automatically
             # So, we'll manually edit them to make sure they don't actually change
             pylint_repo = [repo for repo in yaml_repos if repo["repo"] == "https://github.com/pycqa/pylint"][0]
