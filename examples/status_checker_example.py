@@ -1,4 +1,7 @@
-from status_checker import check_build_statuses, save_build_statuses
+import os
+from build_status import check_build_statuses, save_build_statuses
 
-failed, errored = check_build_statuses(user="tekktrik", debug=True)
-save_build_statuses(failed, errored)
+bundle_path = os.path.join(os.getcwd(), "Adafruit_CircuitPython_Bundle")
+
+build_results = check_build_statuses(bundle_path, user="tekktrik", debug=True)
+save_build_statuses(build_results)
