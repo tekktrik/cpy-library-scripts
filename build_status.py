@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2017 Scott Shawcroft, written for Adafruit Industries
+#
+# SPDX-License-Identifier: MIT
+
 """
 
 build_status.py
@@ -11,7 +15,6 @@ contained within a cloned Adafruit CircuitPython Bundle
 """
 
 import os
-import glob
 import json
 from typing import Optional, Literal, List, Tuple
 from iter_libraries import iter_library_with_func, StrPath
@@ -83,10 +86,9 @@ def check_build_status(
         # Run through `gh` CLI check, handle failures
         if run_gh_cli_check(user, workflow_name):
             return "Success"
-        else:
-            if debug:
-                print("***", "Library", lib_path, "failed the patch!", "***")
-            return "Failed"
+        if debug:
+            print("***", "Library", lib_path, "failed the patch!", "***")
+        return "Failed"
 
     except json.decoder.JSONDecodeError:
         # Handle that an error occured using the `gh` CLI
@@ -109,7 +111,7 @@ def check_build_statuses(
 ) -> List[Tuple[StrPath, Literal["Success", "Failed", "Error"]]]:
     """Checks all the libraries in a cloned Adafruit CircuitPython Bundle
     to get the latest build status with the requested infomration
-    
+
     :param StrPath bundle_oath: The path to the cloned bundle
     :param str|None user: The user that triggered the run; if `None` is
         provided, any user is acceptable

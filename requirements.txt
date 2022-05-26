@@ -1,2 +1,6 @@
+# SPDX-FileCopyrightText: 2022 Alec Delaney
+#
+# SPDX-License-Identifier: MIT
+
 oyaml>=1.0
 parse>=1.19.0

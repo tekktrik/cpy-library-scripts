@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: 2022 Alec Delaney
+#
+# SPDX-License-Identifier: MIT
+
+
 """
 
 iter_libraries.py
@@ -18,8 +23,16 @@ from typing import Tuple, TypeAlias, Iterable, Any, List, Sequence, Protocol
 StrPath: TypeAlias = str | os.PathLike[str]
 
 # Helpful type annotations for library iteration
+# pylint: disable=too-few-public-methods
 class LibraryFunc(Protocol):
-    def __call__(self, lib_path: StrPath, *args: Sequence[Any]):
+    """Typing protocol for methods (or callables) that take the following
+    parameters:
+
+    - (StrPath) The path to a specific Adafruit library
+    - (Sequence[Any]) A list of other arguments
+    """
+
+    def __call__(self, lib_path: StrPath, *args: Sequence[Any]) -> Any:
         ...
 
 
@@ -29,7 +42,7 @@ def iter_library_with_func(
 ) -> List[Tuple[StrPath, List[Any]]]:
     """Iterate through the libraries and run a given function with the
     provided arguments
-    
+
     :param StrPath bundle_oath: The path to the cloned bundle
     :param Iterable func_workflow: An iterable of tuples containing pairs
         of functions and corresponding arguments; the path to each specific

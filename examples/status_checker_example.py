@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2017 Scott Shawcroft, written for Adafruit Industries
+#
+# SPDX-License-Identifier: MIT
+
 import os
 from build_status import check_build_statuses, save_build_statuses
 
