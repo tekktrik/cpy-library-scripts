@@ -33,10 +33,6 @@ jobs:
       uses: actions/checkout@v1
       with:
         submodules: true
-    - name: Install dependencies
-      # (e.g. - apt-get: gettext, etc; pip: circuitpython-build-tools, requirements.txt; etc.)
-      run: |
-        source actions-ci/install.sh
     - name: Pip install Sphinx, pre-commit
       run: |
         pip install --force-reinstall Sphinx sphinx-rtd-theme pre-commit
