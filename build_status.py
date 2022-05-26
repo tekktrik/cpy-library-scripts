@@ -5,7 +5,7 @@
 """
 
 build_status.py
-=================
+===============
 
 Functionality using the `gh` CLI to check the CI status of repos
 contained within a cloned Adafruit CircuitPython Bundle
@@ -17,7 +17,8 @@ contained within a cloned Adafruit CircuitPython Bundle
 import os
 import json
 from typing import Optional, Literal, List, Tuple
-from iter_libraries import iter_library_with_func, StrPath
+from lib_funcs import StrPath, in_lib_path
+from iter_libraries import iter_library_with_func
 
 # The Default path uses the current working directory
 DEFAULT_BUNDLE_PATH = os.path.join(os.getcwd(), "Adafruit_CircuitPython_Bundle")
@@ -57,6 +58,7 @@ def run_gh_cli_check(
 
 
 # pylint: disable=too-many-nested-blocks
+@in_lib_path
 def check_build_status(
     lib_path: StrPath,
     user: Optional[str] = None,
