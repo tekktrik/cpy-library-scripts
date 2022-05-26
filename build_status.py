@@ -1,10 +1,10 @@
 """
 
-status_checker.py
+build_status.py
 =================
 
-Uses the `gh` CLI to check the status of repos contained within a
-cloned Adafruit CircuitPython Bundle
+Functionality using the `gh` CLI to check the CI status of repos
+contained within a cloned Adafruit CircuitPython Bundle
 
 * Author(s): Alec Delaney
 
@@ -13,16 +13,14 @@ cloned Adafruit CircuitPython Bundle
 import os
 import glob
 import json
-from typing import Optional, TypeAlias
-
-# Helpful type annotation for path-like strings
-StrPath: TypeAlias = str | os.PathLike[str]
+from typing import Optional, Literal, List, Tuple
+from iter_libraries import iter_library_with_func, StrPath
 
 # The Default path uses the current working directory
 DEFAULT_BUNDLE_PATH = os.path.join(os.getcwd(), "Adafruit_CircuitPython_Bundle")
 
 
-def _run_gh_cli_check(
+def run_gh_cli_check(
     user: Optional[str] = None,
     workflow_name: Optional[str] = "Build CI",
 ) -> bool:
@@ -33,6 +31,8 @@ def _run_gh_cli_check(
     :param str|None workflow_name: The name of the workflow; if `None` is
         provided, any workflow name is acceptable; the defail is
         `"Build CI"`
+    :return: Whether the requested build was successful
+    :rtype: bool
     """
 
     # Prepare the `gh` command
@@ -50,87 +50,88 @@ def _run_gh_cli_check(
     latest_result = results[0]
 
     # Return the results
-    return latest_result["conclusion"] != "success"
+    return latest_result["conclusion"] == "success"
 
 
 # pylint: disable=too-many-nested-blocks
-def check_build_statuses(
-    bundle_path: StrPath = DEFAULT_BUNDLE_PATH,
+def check_build_status(
+    lib_path: StrPath,
     user: Optional[str] = None,
     workflow_name: Optional[str] = "Build CI",
-    *,
     debug: bool = False,
-) -> tuple[list[str], list[str]]:
+) -> Literal["Success", "Failed", "Error"]:
     """Uses the `gh` CLI client to check the build statuses of the Adafruit
     CircuitPython Bundle
 
-    :param StrPath bundle_path: The path to the Adafruit CircuitPython
-        Bundle; the default assumes its in the current working directory
+    :param StrPath lib_path: The path to the Adafruit library
     :param str|None user: The user that triggered the run; if `None` is
         provided, any user is acceptable
     :param str|None workflow_name: The name of the workflow; if `None` is
         provided, any workflow name is acceptable; the defail is
         `"Build CI"`
-    :param bool debug: (keyword-only) Whether debug statements should be
-        printed to the standard output
+    :param bool debug: Whether debug statements should be printed to
+        the standard output
+    :return: Whether the requested build was successful, failed, or had
+        and error occur during the check
+    :rtype: str
     """
 
-    # Bundle branches
-    library_branches = ("drivers", "helpers")
+    if debug:
+        print("Checking", lib_path)
 
-    # Get home path to return to after each change
-    home_path = os.path.dirname(os.path.abspath(bundle_path))
-
-    # Initialize list of failed/errored patches
-    failed_builds = []
-    error_builds = []
-
-    # Loop through each bundle branch
-    for branch_name in library_branches:
-
-        libraries_glob_path = os.path.join(bundle_path, "libraries", branch_name, "*")
-        libraries_path_list = glob.glob(libraries_glob_path)
-
-        # Enter each library in the bundle
-        for library_path in libraries_path_list:
-            os.chdir(library_path)
+    try:
+        # Run through `gh` CLI check, handle failures
+        if run_gh_cli_check(user, workflow_name):
+            return "Success"
+        else:
             if debug:
-                print(f"Now checking {library_path}")
+                print("***", "Library", lib_path, "failed the patch!", "***")
+            return "Failed"
 
-            suspect_lib = "".join([branch_name, "/", os.path.basename(library_path)])
+    except json.decoder.JSONDecodeError:
+        # Handle that an error occured using the `gh` CLI
+        if debug:
+            print(
+                "???",
+                "Library",
+                lib_path,
+                "had an error occur, could not be determined",
+                "???",
+            )
+        return "Error"
 
-            try:
-                # Run through `gh` CLI check, handle failures
-                if _run_gh_cli_check(user, workflow_name):
-                    if debug:
-                        print("***", "Library", suspect_lib, "failed the patch!", "***")
-                    failed_builds.append(suspect_lib)
 
-            except json.decoder.JSONDecodeError:
-                # Handle that an error occured using the `gh` CLI
-                if debug:
-                    print(
-                        "???",
-                        "Library",
-                        suspect_lib,
-                        "had an error occur, could not be determined",
-                        "???",
-                    )
-                error_builds.append(suspect_lib)
+def check_build_statuses(
+    bundle_path: StrPath,
+    user: Optional[str] = None,
+    workflow_name: Optional[str] = "Build CI",
+    debug: bool = False,
+) -> List[Tuple[StrPath, Literal["Success", "Failed", "Error"]]]:
+    """Checks all the libraries in a cloned Adafruit CircuitPython Bundle
+    to get the latest build status with the requested infomration
+    
+    :param StrPath bundle_oath: The path to the cloned bundle
+    :param str|None user: The user that triggered the run; if `None` is
+        provided, any user is acceptable
+    :param str|None workflow_name: The name of the workflow; if `None` is
+        provided, any workflow name is acceptable; the defail is
+        `"Build CI"`
+    :param bool debug: Whether debug statements should be printed to
+        the standard output
+    :return: A list of tuples containing paired library paths and build
+        statuses
+    :rtype: list
+    """
 
-            finally:
-                # Change back to home directory
-                os.chdir(home_path)
-
-    return failed_builds, error_builds
+    args = (user, workflow_name, debug)
+    return iter_library_with_func(bundle_path, [(check_build_status, args)])
 
 
 def save_build_statuses(
-    failed_builds: Optional[list[str]] = None,
-    error_builds: Optional[list[str]] = None,
+    build_results: List[Tuple[StrPath, Literal["Success", "Failed", "Error"]]],
     failure_filepath: StrPath = "failures.txt",
     error_filepath: StrPath = "errors.txt",
-):
+) -> None:
     """Save the list of failed and/or errored libraries to files
 
     :param list[str]|None failed_builds: The list of failed libraries; if
@@ -143,6 +144,10 @@ def save_build_statuses(
     :param StrPath error_filepath: The filename/filepath to write the list
         of libraries with errored checks to; the default is "errors.txt"
     """
+
+    # Get failed and errored builds
+    failed_builds = [result[0] for result in build_results if result[1] == "Failed"]
+    error_builds = [result[0] for result in build_results if result[1] == "Error"]
 
     # Save the list of failed builds, if provided
     if failed_builds:
