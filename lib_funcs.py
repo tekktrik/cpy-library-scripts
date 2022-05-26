@@ -31,7 +31,7 @@ class LibraryFunc(Protocol):
         ...
 
 
-def with_lib_path(func: LibraryFunc) -> LibraryFunc:
+def in_lib_path(func: LibraryFunc) -> LibraryFunc:
     """Decorator for automating temporarily entering a function's
     library directory
 

@@ -17,7 +17,7 @@ contained within a cloned Adafruit CircuitPython Bundle
 import os
 import json
 from typing import Optional, Literal, List, Tuple
-from lib_funcs import StrPath, with_lib_path
+from lib_funcs import StrPath, in_lib_path
 from iter_libraries import iter_library_with_func
 
 # The Default path uses the current working directory
@@ -58,7 +58,7 @@ def run_gh_cli_check(
 
 
 # pylint: disable=too-many-nested-blocks
-@with_lib_path
+@in_lib_path
 def check_build_status(
     lib_path: StrPath,
     user: Optional[str] = None,
