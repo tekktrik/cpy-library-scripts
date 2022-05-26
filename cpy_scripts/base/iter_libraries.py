@@ -18,7 +18,7 @@ Bundle to run functions on each library
 import os
 import glob
 from typing import Tuple, Iterable, Any, List, Sequence
-from scripts.base.lib_funcs import StrPath, LibraryFunc
+from cpy_scripts.base.lib_funcs import StrPath, LibraryFunc
 
 
 def iter_library_with_func(
