@@ -17,8 +17,8 @@ contained within a cloned Adafruit CircuitPython Bundle
 import os
 import json
 from typing import Optional, Literal, List, Tuple
-from lib_funcs import StrPath, in_lib_path
-from iter_libraries import iter_library_with_func
+from scripts.base.lib_funcs import StrPath, in_lib_path
+from scripts.base.iter_libraries import iter_library_with_func
 
 # The Default path uses the current working directory
 DEFAULT_BUNDLE_PATH = os.path.join(os.getcwd(), "Adafruit_CircuitPython_Bundle")
@@ -57,7 +57,6 @@ def run_gh_cli_check(
     return latest_result["conclusion"] == "success"
 
 
-# pylint: disable=too-many-nested-blocks
 @in_lib_path
 def check_build_status(
     lib_path: StrPath,
