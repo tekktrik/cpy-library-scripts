@@ -5,7 +5,7 @@
 """
 
 build_status.py
-=================
+===============
 
 Functionality using the `gh` CLI to check the CI status of repos
 contained within a cloned Adafruit CircuitPython Bundle
