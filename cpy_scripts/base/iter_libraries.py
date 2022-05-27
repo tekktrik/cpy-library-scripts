@@ -28,7 +28,7 @@ def iter_library_with_func(
     """Iterate through the libraries and run a given function with the
     provided arguments
 
-    :param StrPath bundle_oath: The path to the cloned bundle
+    :param StrPath bundle_path: The path to the cloned bundle
     :param Iterable func_workflow: An iterable of tuples containing pairs
         of functions and corresponding arguments; the path to each specific
         library is automatically provided to the functions, so the functions
