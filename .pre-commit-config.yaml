@@ -25,7 +25,7 @@ repos:
         types: [python]
         args:
             - "cpy_scripts/"
-            - --disable=consider-using-f-string,duplicate-code
+            - --disable=duplicate-code
             - --ignore=conf.py
     -   id: pylint
         name: pylint (test code)
@@ -33,4 +33,4 @@ repos:
         types: [python]
         files: "^tests/"
         args:
-            - --disable=missing-docstring,consider-using-f-string,duplicate-code
+            - --disable=missing-docstring,duplicate-code
