@@ -17,6 +17,7 @@ from typing import TypeAlias, Protocol, Sequence, Any
 
 # Helpful type annotation for path-like strings
 StrPath: TypeAlias = str | os.PathLike[str]
+"""Path or path-like strings"""
 
 # pylint: disable=too-few-public-methods
 class LibraryFunc(Protocol):
