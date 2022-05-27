@@ -20,7 +20,7 @@ StrPath: TypeAlias = str | os.PathLike[str]
 """Path or path-like strings"""
 
 # pylint: disable=too-few-public-methods
-class LibraryFunc(Protocol):
+class LibFunc(Protocol):
     """Typing protocol for methods (or callables) that take the following
     parameters:
 
@@ -32,7 +32,7 @@ class LibraryFunc(Protocol):
         ...
 
 
-def in_lib_path(func: LibraryFunc) -> LibraryFunc:
+def in_lib_path(func: LibFunc) -> LibFunc:
     """Decorator for automating temporarily entering a function's
     library directory
 
