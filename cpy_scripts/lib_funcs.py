@@ -15,7 +15,7 @@ Library-specific functionalities to aid in developing patches
 
 import os
 import functools
-from typing import TypeAlias, Protocol, Sequence, Any
+from typing import TypeAlias, Protocol, Sequence, Any, Dict
 
 # Helpful type annotation for path-like strings
 StrPath: TypeAlias = str | os.PathLike[str]
@@ -27,10 +27,13 @@ class LibFunc(Protocol):
     parameters:
 
     - (StrPath) The path to a specific Adafruit library
-    - (Sequence[Any]) A list of other arguments
+    - (Sequence[Any]) A list of any positional arguments
+    - (Dict[str, Any]) A dict of any keyword arguments
     """
 
-    def __call__(self, lib_path: StrPath, *args: Sequence[Any]) -> Any:
+    def __call__(
+        self, lib_path: StrPath, *args: Sequence[Any], **kwargs: Dict[str, Any]
+    ) -> Any:
         ...
 
 

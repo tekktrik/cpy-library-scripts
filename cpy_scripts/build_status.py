@@ -110,6 +110,7 @@ def check_build_statuses(
     bundle_path: StrPath,
     user: Optional[str] = None,
     workflow_name: Optional[str] = "Build CI",
+    *,
     debug: bool = False,
 ) -> List[Tuple[StrPath, Literal["Success", "Failed", "Error"]]]:
     """Checks all the libraries in a cloned Adafruit CircuitPython Bundle
@@ -128,8 +129,9 @@ def check_build_statuses(
     :rtype: list
     """
 
-    args = (user, workflow_name, debug)
-    return iter_library_with_func(bundle_path, [(check_build_status, args)])
+    args = (user, workflow_name)
+    kwargs = {"debug": debug}
+    return iter_library_with_func(bundle_path, [(check_build_status, args, kwargs)])
 
 
 def save_build_statuses(
