@@ -21,7 +21,9 @@ from cpy_scripts.base.lib_funcs import StrPath, in_lib_path
 from cpy_scripts.base.iter_libraries import iter_library_with_func
 
 # The Default path uses the current working directory
-DEFAULT_BUNDLE_PATH = os.path.join(os.getcwd(), "Adafruit_CircuitPython_Bundle")
+DEFAULT_BUNDLE_PATH: str = os.path.join(os.getcwd(), "Adafruit_CircuitPython_Bundle")
+"""The default assumed path to the bundle, which is that it is within the
+current working directory"""
 
 
 def run_gh_cli_check(
