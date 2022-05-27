@@ -24,8 +24,9 @@ repos:
         name: pylint (library and examples)
         types: [python]
         args:
-            - "scripts/"
+            - "cpy_scripts/"
             - --disable=consider-using-f-string,duplicate-code
+            - --ignore=conf.py
     -   id: pylint
         name: pylint (test code)
         description: Run pylint rules on "tests/*.py" files
