@@ -1,7 +1,7 @@
 cpy-library-scripts
 ===================
 
-.. image:: https://readthedocs.org/projects/acircuitpython-library-scripts/badge/?version=latest
+.. image:: https://readthedocs.org/projects/circuitpython-library-scripts/badge/?version=latest
     :target: https://circuitpython-library-scripts.readthedocs.io/en/latest/
     :alt: Documentation Status
 
