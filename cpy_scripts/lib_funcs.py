@@ -9,6 +9,8 @@ lib_funcs.py
 
 Library-specific functionalities to aid in developing patches
 
+* Author(s): Alec Delaney
+
 """
 
 import os
