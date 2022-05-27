@@ -18,7 +18,7 @@ Bundle to run functions on each library
 import os
 import glob
 from typing import TypeAlias, Tuple, Iterable, Any, List, Sequence
-from cpy_scripts.base.lib_funcs import StrPath, LibFunc
+from cpy_scripts.lib_funcs import StrPath, LibFunc
 
 # Helpful type annotation definitions
 

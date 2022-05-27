@@ -17,8 +17,8 @@ contained within a cloned Adafruit CircuitPython Bundle
 import os
 import json
 from typing import Optional, Literal, List, Tuple
-from cpy_scripts.base.lib_funcs import StrPath, in_lib_path
-from cpy_scripts.base.iter_libraries import iter_library_with_func
+from cpy_scripts.lib_funcs import StrPath, in_lib_path
+from cpy_scripts.iter_libraries import iter_library_with_func
 
 # The Default path uses the current working directory
 DEFAULT_BUNDLE_PATH: str = os.path.join(os.getcwd(), "Adafruit_CircuitPython_Bundle")
