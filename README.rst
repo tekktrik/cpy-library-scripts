@@ -1,8 +1,8 @@
 cpy-library-scripts
 ===================
 
-.. image:: https://readthedocs.org/projects/circuitpython-library-scripts/badge/?version=latest
-    :target: https://circuitpython-library-scripts.readthedocs.io/en/latest/
+.. image:: https://readthedocs.org/projects/cpy-library-scripts/badge/?version=latest
+    :target: https://cpy-library-scripts.readthedocs.io/en/latest/
     :alt: Documentation Status
 
 .. image:: https://github.com/tekktrik/cpy-library-scripts/workflows/Build%20CI/badge.svg
