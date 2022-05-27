@@ -17,14 +17,25 @@ Bundle to run functions on each library
 
 import os
 import glob
-from typing import Tuple, Iterable, Any, List, Sequence
-from cpy_scripts.base.lib_funcs import StrPath, LibraryFunc
+from typing import TypeAlias, Tuple, Iterable, Any, List, Sequence
+from cpy_scripts.base.lib_funcs import StrPath, LibFunc
+
+# Helpful type annotation definitions
+
+LibFunc_IterInstruction: TypeAlias = Tuple[LibFunc, Sequence[Any]]
+"""Instruction set as a tuple of a function to run on a
+library and a list of the arguments to be provided to it"""
+
+LibFunc_IterResult: TypeAlias = Tuple[StrPath, List[Any]]
+"""Result of function(s) run on a library as a tuple of the
+path to the library modified and a list of the result(s) of
+the function(s)"""
 
 
 def iter_library_with_func(
     bundle_path: StrPath,
-    func_workflow: Iterable[Tuple[LibraryFunc, Sequence[Any]]],
-) -> List[Tuple[StrPath, List[Any]]]:
+    func_workflow: Iterable[LibFunc_IterInstruction],
+) -> List[LibFunc_IterResult]:
     """Iterate through the libraries and run a given function with the
     provided arguments
 
