@@ -45,15 +45,14 @@ def in_lib_path(func: LibFunc) -> LibFunc:
     """
 
     @functools.wraps(func)
-    def wrapper_use_lib_path(*args, **kwargs) -> Any:
+    def wrapper_use_lib_path(lib_path: StrPath, *args, **kwargs) -> Any:
 
-        # Get the relevant directories
+        # Get the current directory
         current_path = os.getcwd()
-        lib_path = args[0]
 
         # Enter the library directory for the duration of executing the function
         os.chdir(lib_path)
-        result = func(*args, **kwargs)
+        result = func(lib_path, *args, **kwargs)
         os.chdir(current_path)
 
         # Return the result of the function
