@@ -112,7 +112,7 @@ def check_build_statuses(
     workflow_name: Optional[str] = "Build CI",
     *,
     debug: bool = False,
-) -> List[Tuple[StrPath, Literal["Success", "Failed", "Error"]]]:
+) -> List[Tuple[StrPath, List[Literal["Success", "Failed", "Error"]]]]:
     """Checks all the libraries in a cloned Adafruit CircuitPython Bundle
     to get the latest build status with the requested infomration
 
@@ -135,7 +135,7 @@ def check_build_statuses(
 
 
 def save_build_statuses(
-    build_results: List[Tuple[StrPath, Literal["Success", "Failed", "Error"]]],
+    build_results: List[Tuple[StrPath, List[Literal["Success", "Failed", "Error"]]]],
     failure_filepath: StrPath = "failures.txt",
     error_filepath: StrPath = "errors.txt",
 ) -> None:
@@ -153,8 +153,8 @@ def save_build_statuses(
     """
 
     # Get failed and errored builds
-    failed_builds = [result[0] for result in build_results if result[1] == "Failed"]
-    error_builds = [result[0] for result in build_results if result[1] == "Error"]
+    failed_builds = [result[0] for result in build_results if result[1][0] == "Failed"]
+    error_builds = [result[0] for result in build_results if result[1][0] == "Error"]
 
     # Save the list of failed builds, if provided
     if failed_builds:
