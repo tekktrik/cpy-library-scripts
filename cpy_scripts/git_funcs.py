@@ -1,14 +1,40 @@
+# SPDX-FileCopyrightText: 2022 Alec Delaney
+#
+# SPDX-License-Identifier: MIT
+
+
+"""
+
+git_funcs.py
+============
+
+Functionality for using GitPython to fetch, pull, commit, push, etc. to
+cloned repos and their remotes
+
+* Author(s): Alec Delaney
+
+"""
+
 import functools
-from typing import Tuple, Callable, Any, Optional
+from typing import Tuple, Any
 import git
 import git.repo
 import git.index.base
-from cpy_scripts.lib_funcs import StrPath, LibFunc
+from cpy_scripts.lib_funcs import StrPath
 
 
 def _get_repo_and_remote(
     lib_path: StrPath, remote_name: str = "origin"
 ) -> Tuple[git.repo.Repo, git.Remote]:
+    """
+    Get the repo and remote objects
+
+    :param StrPath lib_path: The path to the repo
+    :param str remote_name: (optional) The name of the remote,
+        default is ``origin``
+    :return: The repo and remote objects
+    :rtype: tuple
+    """
 
     # Create the repo and remote objects
     repo = git.repo.Repo(lib_path)
@@ -17,7 +43,7 @@ def _get_repo_and_remote(
     return repo, remote
 
 
-def sync_repo(
+def sync_and_checkout(
     lib_path: StrPath, remote_name: str = "origin", branch_name: str = "main"
 ) -> None:
     """
@@ -66,10 +92,21 @@ def commit_changes(
     remote_name: str = "origin",
     skip_hooks: bool = True,
 ) -> None:
+    """
+    Stage all files and commit them
+
+    :param StrPath lib_path: The path to the repo
+    :param str message: The commit message
+    :param str remote_name: (optional) The name of the remote,
+        default is ``origin``
+    :param bool skip_hooks: (optional) Whether commit hooks should be
+        skipped; default is True
+    """
 
     # Create the repo and remote objects
     repo, _ = _get_repo_and_remote(lib_path, remote_name)
 
+    # Add all the files and commit them
     index_file = git.index.base.IndexFile(repo)
     index_file.add("*")
     index_file.commit(message, skip_hooks=skip_hooks)
@@ -86,10 +123,13 @@ def sync_commit_push(
     Decorator for automatically fetching, pulling, and pushing changes
     for a library function
 
+    :param str message: The commit message
     :param str remote_name: (optional) The name of the remote, default
         is ``origin``
     :param str branch_name: (optional) The name of the branch, default
         is ``main``
+    :param bool skip_hooks: (optional) Whether to skip the commit hooks,
+        default is ``True``
     """
 
     def decorator_sync_commit_push(func):
@@ -99,7 +139,7 @@ def sync_commit_push(
         def wrapper_sync_commit_push(lib_path: StrPath, *args, **kwargs) -> Any:
 
             # Fetch and pull to repo
-            sync_repo(lib_path, remote_name, branch_name)
+            sync_and_checkout(lib_path, remote_name, branch_name)
 
             # Run fucntion
             result = func(lib_path, *args, **kwargs)
